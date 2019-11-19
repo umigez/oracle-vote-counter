@@ -34,7 +34,7 @@ public class CandidatesReaderTest {
 
     @Test
     public void trimWhiteSpace() throws IOException {
-        String s = "  \n  1 1   \n   2 2\t   \n3 3  \n  \n   \n    4 4\n";
+        String s = "  \n  1 1   \n \t  2 2\t   \n3 3  \n  \n   \n    4 4\n";
         InputStream stream = IOUtils.toInputStream(s);
         List<String> candidates = CandidatesReader.readCandidates(stream);
 
