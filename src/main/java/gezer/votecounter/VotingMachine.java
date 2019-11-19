@@ -64,11 +64,13 @@ public class VotingMachine {
     }
 
     /**
+     * This method should be called repeatedly until a winner is declared.
+     *
      * @param ballotAllocation   can initially be empty - but must contain all candidates still in the running.
-     * @param unallocatedBallots not yet allocated ballots.
+     * @param unallocatedBallots not yet allocated ballots. The ballots from the candidate who was last eliminated.
      */
     private void tallySingleRound(Map<String, Collection<Ballot>> ballotAllocation, List<Ballot> unallocatedBallots) {
-        // Create copy so we can modify
+        // Create defensive copy so we can modify safely
         ballotAllocation = deepCopy(ballotAllocation);
 
         for (Ballot ballot : unallocatedBallots) {
@@ -80,12 +82,17 @@ public class VotingMachine {
                     allocatedBallots.add(ballot);
                     break;
                 }
+                // exhausted ballots will not be allocated - and hence not counted
             }
         }
 
         final int numberToWin = (countNumOfBallots(ballotAllocation) / 2) + 1;
 
         // Did anybody win?
+        Optional<String> winner = ballotAllocation.entrySet().stream()
+                .filter(e -> e.getValue().size() >= numberToWin)
+                .map(Map.Entry::getKey)
+                .findAny();
         //TODO
     }
 
